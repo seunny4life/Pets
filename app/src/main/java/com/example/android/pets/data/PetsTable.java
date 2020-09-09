@@ -3,6 +3,7 @@ package com.example.android.pets.data;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -58,7 +59,7 @@ public final class PetsTable extends SQLiteOpenHelper {
 
     //Insert Data
     // Gets the data repository in write mode
-    public long insertDatabase(String name, String breed, int gender, double measurement) {
+   /* public long insertDatabase(String name, String breed, int gender, double measurement) {
         contentValues = new ContentValues();
         insertData = this.getWritableDatabase();
 
@@ -76,7 +77,18 @@ public final class PetsTable extends SQLiteOpenHelper {
 
         return inserted;
     }
+*/
+    public long insertData(ContentValues contentValues) {
 
+        insertData = this.getWritableDatabase();
+
+        long inserted = insertData.insert(TABLE_NAME, null, contentValues);
+
+        if (inserted <= 0) {
+            throw new SQLException("Failed to Add");
+        }
+        return inserted;
+    }
 
     //Read all Data
     public Cursor getData(long id) {

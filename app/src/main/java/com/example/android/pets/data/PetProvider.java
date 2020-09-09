@@ -87,12 +87,9 @@ public class PetProvider extends ContentProvider {
 
         //sqLiteDatabase = petsTable.getReadableDatabase();
         int match = sUriMatcher.match(uri);
-        Cursor cursor;
+        Cursor cursor = null;
         switch (match) {
             case PETS:
-                cursor = sqLiteDatabase.query(TABLE_NAME, projection, selection,
-                        selectionArgs, null, null, null);
-                // cursor.setNotificationUri(getContext().getContentResolver(), uri);
                 break;
             case PETS_ID:
                 projection = new String[]{COL_NAME};
@@ -100,12 +97,13 @@ public class PetProvider extends ContentProvider {
                 selectionArgs = new String[]{String.valueOf(uri)};
                 cursor = sqLiteDatabase.query(TABLE_NAME, projection, selection,
                         selectionArgs, null, null, null);
-                //cursor.setNotificationUri(getContext().getContentResolver(), uri);
+                cursor.setNotificationUri(getContext().getContentResolver(), uri);
+
                 break;
             default:
                 throw new IllegalArgumentException("Cannot query unknown URI " + uri);
         }
-        cursor.close();
+        //cursor.close();
 
         return cursor;
 
@@ -118,15 +116,15 @@ public class PetProvider extends ContentProvider {
     public Uri insert(Uri uri, ContentValues contentValues) {
 
 
-        sqLiteDatabase = petsTable.getWritableDatabase();
+       /* sqLiteDatabase = petsTable.getWritableDatabase();
         // Insert the new row, returning the primary key value of the new row
         long inserted = sqLiteDatabase.insert(TABLE_NAME, null, contentValues);
 
-        //sqLiteDatabase.close();
+        sqLiteDatabase.close();
 
-        /**
+        *//**
          * If record is added successfully
-         */
+         *//*
 
         if (inserted > 0) {
             Uri uri1 = ContentUris.withAppendedId(CONTENT_URI, inserted);
@@ -134,7 +132,26 @@ public class PetProvider extends ContentProvider {
             return uri1;
         }
         throw new SQLException("Failed " + uri);
-        //return ContentUris.withAppendedId(uri, inserted);
+        //return ContentUris.withAppendedId(uri, inserted);*/
+
+//        try {
+//            long insertProvided = petsTable.insertData(contentValues);
+//
+//            Uri uri1 = ContentUris.withAppendedId(CONTENT_URI, insertProvided);
+//            getContext().getContentResolver().notifyChange(uri1, null);
+//            return uri1;
+//        } catch (SQLException e) {
+//            return null;
+//        }
+
+        sqLiteDatabase = petsTable.getWritableDatabase();
+
+        long db = petsTable.insertData(contentValues);
+        if (db <= 0){
+            Uri uri1 = ContentUris.withAppendedId(CONTENT_URI, db);
+            getContext().getContentResolver().notifyChange(uri1, null);
+            return uri1;
+        } throw new SQLException("FAILED!! NOT DATA STORE " +  uri);
     }
 
     /**
