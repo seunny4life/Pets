@@ -153,6 +153,7 @@ public class EditorActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Saved", Toast.LENGTH_SHORT)
                     .show();
         }*/
+
         contentValues.put(COL_NAME, name);
         contentValues.put(COL_BREED, breed);
         contentValues.put(COL_GENDER, gender);
@@ -164,7 +165,7 @@ public class EditorActivity extends AppCompatActivity {
                     Toast.LENGTH_SHORT)
                     .show();
         } else {
-            // petsTable.insertDatabase(name, breed, gender, weight);
+            getContentResolver().insert(PetProvider.CONTENT_URI, contentValues);
             Toast.makeText(getApplicationContext(), "Saved", Toast.LENGTH_SHORT)
                     .show();
             finish();

@@ -10,7 +10,7 @@ import android.widget.TextView;
 import com.example.android.pets.data.Pets;
 
 import java.util.List;
-
+/*
 public class PetListView extends RecyclerView.Adapter<PetListView.MyViewHolder> {
 
     private List<Pets> petListItem;
@@ -29,7 +29,7 @@ public class PetListView extends RecyclerView.Adapter<PetListView.MyViewHolder> 
         }
     }
 
-    public PetListView(List<Pets> petListItem, Context context) {
+    public PetListView(Context context, List<Pets> petListItem) {
         this.petListItem = petListItem;
         this.context = context;
     }
@@ -38,7 +38,7 @@ public class PetListView extends RecyclerView.Adapter<PetListView.MyViewHolder> 
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.simplelistview, parent);
-        return null;
+        return new MyViewHolder(view);
     }
 
     @Override
@@ -49,7 +49,4 @@ public class PetListView extends RecyclerView.Adapter<PetListView.MyViewHolder> 
     @Override
     public int getItemCount() {
         return 0;
-    }
-
-
-}
+    }*/

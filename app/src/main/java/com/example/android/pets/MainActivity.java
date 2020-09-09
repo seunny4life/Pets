@@ -1,6 +1,9 @@
 package com.example.android.pets;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -9,14 +12,24 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.android.pets.data.PetProvider;
 import com.example.android.pets.data.Pets;
 import com.example.android.pets.data.PetsTable;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.example.android.pets.data.PetsTable.COL_BREED;
+import static com.example.android.pets.data.PetsTable.COL_GENDER;
+import static com.example.android.pets.data.PetsTable.COL_ID;
+import static com.example.android.pets.data.PetsTable.COL_MEASUREMENT;
+import static com.example.android.pets.data.PetsTable.COL_NAME;
+import static com.example.android.pets.data.PetsTable.TABLE_NAME;
+import static com.example.android.pets.data.PetProvider.*;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -26,9 +39,9 @@ public class MainActivity extends AppCompatActivity {
     private List<Pets> listOfPets;
     // private PetAdapter petAdapter;
     private PetProvider petProvider;
-    private PetListView petListView;
+    //private PetListView petListView;
     private RecyclerView recyclerView;
-
+    private ListViewItemAdapter listViewItemAdapter;
 
 
     @Override
@@ -60,33 +73,45 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void displayInformation() {
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerViewShow);
 
-        petsTable = new PetsTable(this);
+//        recyclerView = (RecyclerView) findViewById(R.id.recyclerViewShow);
+//
+//        petsTable = new PetsTable(this);
+//
+//        petProvider = new PetProvider();
+//
+//        pets = new Pets();
+//
+//        listOfPets = new ArrayList<>();
+//
+//       petListView = new PetListView(this, listOfPets);
+//
+//        RecyclerView.LayoutManager layout = new LinearLayoutManager(getApplicationContext());
+//        recyclerView.setLayoutManager(layout);
+//
+//        recyclerView.setAdapter(petListView);
 
-        petProvider = new PetProvider();
+// PetsTable is a SQLiteOpenHelper class connecting to SQLite
 
-        pets = new Pets();
 
-        listOfPets = new ArrayList<>();
+// Get access to the underlying writeable database
 
-       // petListView = new PetListView(this, listOfPets);
+// Query for items from the database and get a cursor back
+        String[] projection = new String[]{
+                COL_ID,
+               };
 
-        RecyclerView.LayoutManager layout = new LinearLayoutManager(getApplicationContext());
-        recyclerView.setLayoutManager(layout);
+        Cursor todoCursor = getContentResolver().query(CONTENT_URI, projection,
+                null, null, null);
 
-        recyclerView.setAdapter(petListView);
+        ListView item = (ListView) findViewById(R.id.lvItemView);
 
-        /*petsTable = new PetsTable(this);
-        pets = new Pets();
-        // list = new ArrayList<>();
-        //list = petsTable.getAllData();
-        Cursor cursor = null;
-        ListView listView = (ListView) findViewById(R.id.listView);
+        ListViewItemAdapter listViewItemAdapter = new ListViewItemAdapter(this, todoCursor);
 
-        petAdapter = new PetAdapter(this, null);
+        item.setAdapter(listViewItemAdapter);
 
-        listView.setAdapter(petAdapter);*/
+        listViewItemAdapter.changeCursor(todoCursor);
+
     }
 
     @Override
