@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.net.Uri;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,9 +58,9 @@ public final class PetsTable extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    //Insert Data
+  /*  //Insert Data
     // Gets the data repository in write mode
-   /* public long insertDatabase(String name, String breed, int gender, double measurement) {
+    public long insertDatabase(String name, String breed, int gender, double measurement) {
         contentValues = new ContentValues();
         insertData = this.getWritableDatabase();
 
@@ -76,9 +77,9 @@ public final class PetsTable extends SQLiteOpenHelper {
         insertData.close();
 
         return inserted;
-    }
-*/
-    public long insertData(ContentValues contentValues) {
+    }*/
+
+    public long insertDatabase(ContentValues contentValues) {
 
         insertData = this.getWritableDatabase();
 
@@ -91,7 +92,20 @@ public final class PetsTable extends SQLiteOpenHelper {
     }
 
     //Read all Data
-    public Cursor getData(long id) {
+    public Cursor getData(String id,
+                          String[] projection,
+                          String selection,
+                          String[] selectionArgs,
+                          String sortOrder) {
+
+        Cursor cursor = db.query(id, projection, selection,
+                selectionArgs, null, null, sortOrder);
+
+        cursor.close();
+
+        return cursor;
+
+    /*public Cursor getData(long id) {
 
         String[] projection = {COL_NAME, COL_GENDER};
         String selection = COL_ID + "=?";
@@ -103,6 +117,7 @@ public final class PetsTable extends SQLiteOpenHelper {
 
         return cursor;
 
+    }*/
     }
 
     //TO DISPLAY ALL THE INFORMATION ON THE MAIN PAGE OF OUR APP

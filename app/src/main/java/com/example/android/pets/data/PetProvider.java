@@ -18,7 +18,7 @@ import static com.example.android.pets.data.PetsTable.*;
 
 public class PetProvider extends ContentProvider {
 
-    private PetsTable petsTable;
+    private PetsTable petsTable = null;
     SQLiteDatabase sqLiteDatabase;
 
     private static final int PETS = 100;
@@ -85,26 +85,34 @@ public class PetProvider extends ContentProvider {
                         String selection, String[] selectionArgs,
                         String sortOrder) {
 
-        //sqLiteDatabase = petsTable.getReadableDatabase();
-        int match = sUriMatcher.match(uri);
+        sqLiteDatabase = petsTable.getReadableDatabase();
         Cursor cursor = null;
+        String id = null;
+
+        int match = sUriMatcher.match(uri);
+
         switch (match) {
             case PETS:
+             /*  cursor = sqLiteDatabase.query(TABLE_NAME, projection, selection,
+                        selectionArgs, null, null, sortOrder);*/
                 break;
             case PETS_ID:
                 projection = new String[]{COL_NAME};
                 selection = COL_ID + "=?";
                 selectionArgs = new String[]{String.valueOf(uri)};
-                cursor = sqLiteDatabase.query(TABLE_NAME, projection, selection,
-                        selectionArgs, null, null, null);
-                cursor.setNotificationUri(getContext().getContentResolver(), uri);
 
+               /* cursor = sqLiteDatabase.query(TABLE_NAME, projection, selection,
+                        selectionArgs, null, null, sortOrder);*/
+
+                cursor = petsTable.getData(TABLE_NAME,
+                        projection, selection, selectionArgs,
+                        sortOrder);
+                cursor.setNotificationUri(getContext().getContentResolver(), uri);
                 break;
             default:
                 throw new IllegalArgumentException("Cannot query unknown URI " + uri);
         }
         //cursor.close();
-
         return cursor;
 
     }
@@ -115,50 +123,51 @@ public class PetProvider extends ContentProvider {
     @Override
     public Uri insert(Uri uri, ContentValues contentValues) {
 
+      /* sqLiteDatabase = petsTable.getWritableDatabase();
 
-       /* sqLiteDatabase = petsTable.getWritableDatabase();
         // Insert the new row, returning the primary key value of the new row
+
         long inserted = sqLiteDatabase.insert(TABLE_NAME, null, contentValues);
 
         sqLiteDatabase.close();
 
-        *//**
-         * If record is added successfully
-         *//*
+       //  * If record is added successfully
 
-        if (inserted > 0) {
+       if (inserted >= 0) {
             Uri uri1 = ContentUris.withAppendedId(CONTENT_URI, inserted);
             getContext().getContentResolver().notifyChange(uri1, null);
             return uri1;
         }
         throw new SQLException("Failed " + uri);
-        //return ContentUris.withAppendedId(uri, inserted);*/
+    }*/
 
-//        try {
-//            long insertProvided = petsTable.insertData(contentValues);
-//
-//            Uri uri1 = ContentUris.withAppendedId(CONTENT_URI, insertProvided);
-//            getContext().getContentResolver().notifyChange(uri1, null);
-//            return uri1;
-//        } catch (SQLException e) {
-//            return null;
-//        }
+       /* try {
+            long insertProvided = petsTable.insertDatabase(contentValues);
+
+            Uri uri1 = ContentUris.withAppendedId(CONTENT_URI, insertProvided);
+            getContext().getContentResolver().notifyChange(uri1, null);
+            return uri1;
+        } catch (SQLException e) {
+            return null;
+        }*/
 
         sqLiteDatabase = petsTable.getWritableDatabase();
 
-        long db = petsTable.insertData(contentValues);
-        if (db <= 0){
+        long db = petsTable.insertDatabase(contentValues);
+        if (db >= 0) {
             Uri uri1 = ContentUris.withAppendedId(CONTENT_URI, db);
             getContext().getContentResolver().notifyChange(uri1, null);
             return uri1;
-        } throw new SQLException("FAILED!! NOT DATA STORE " +  uri);
+        }
+        throw new SQLException("FAILED!! NOT DATA STORE " + uri);
     }
 
     /**
      * Updates the data at the given selection and selection arguments, with the new ContentValues.
      */
     @Override
-    public int update(Uri uri, ContentValues contentValues, String selection, String[] selectionArgs) {
+    public int update(Uri uri, ContentValues contentValues, String selection, String[]
+            selectionArgs) {
 
         int count = 0;
         switch (sUriMatcher.match(uri)) {

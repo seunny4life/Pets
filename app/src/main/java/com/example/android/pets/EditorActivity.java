@@ -138,29 +138,34 @@ public class EditorActivity extends AppCompatActivity {
         }
         double weight = Double.parseDouble(measurement);
 
-      /*
-        name = contentValues.getAsString(COL_NAME);
-        breed = contentValues.getAsString(COL_BREED);
-        gender = contentValues.getAsInteger(COL_GENDER);
-        weight = contentValues.getAsDouble(COL_MEASUREMENT);
+        contentValues.put(COL_NAME, name);
+        contentValues.put(COL_BREED, breed);
+        contentValues.put(COL_GENDER, gender);
+        contentValues.put(COL_MEASUREMENT, weight);
 
-        if (name.isEmpty() || weight <= 0) {
+       /* if (name.isEmpty() || weight <= 0) {
             Toast.makeText(getApplicationContext(), "Invalid Name or Weight", Toast.LENGTH_SHORT)
                     .show();
         } else {
             petsTable.insertDatabase(name, breed, gender, weight);
+            //petsTable.insertDatabase(contentValues);
             finish();
             Toast.makeText(getApplicationContext(), "Saved", Toast.LENGTH_SHORT)
                     .show();
         }*/
 
-        contentValues.put(COL_NAME, name);
-        contentValues.put(COL_BREED, breed);
-        contentValues.put(COL_GENDER, gender);
-        contentValues.put(COL_MEASUREMENT, weight);
-        getContentResolver().insert(PetProvider.CONTENT_URI, contentValues);
-
         if (name.isEmpty() || breed.isEmpty() || weight <= 0) {
+            Toast.makeText(getApplicationContext(), " Please complete the information",
+                    Toast.LENGTH_SHORT)
+                    .show();
+        } else {
+            petsTable.insertDatabase(contentValues);
+            Toast.makeText(getApplicationContext(), "Saved", Toast.LENGTH_SHORT)
+                    .show();
+            finish();
+        }
+
+       /* if (name.isEmpty() || breed.isEmpty() || weight <= 0) {
             Toast.makeText(getApplicationContext(), " Please complete the information",
                     Toast.LENGTH_SHORT)
                     .show();
@@ -170,6 +175,8 @@ public class EditorActivity extends AppCompatActivity {
                     .show();
             finish();
         }
+    }*/
+
     }
 
     private void delete() {
