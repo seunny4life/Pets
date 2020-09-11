@@ -57,6 +57,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        petsTable = new PetsTable(this);
+
+        ListView item = (ListView) findViewById(R.id.lvItemView);
 
         displayInformation();
     }
@@ -64,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        displayInformation();
     }
 
     private void editorActivity() {
@@ -92,21 +96,19 @@ public class MainActivity extends AppCompatActivity {
 //        recyclerView.setAdapter(petListView);
 
 // PetsTable is a SQLiteOpenHelper class connecting to SQLite
-
-
 // Get access to the underlying writeable database
-
 // Query for items from the database and get a cursor back
+
         String[] projection = new String[]{
-                COL_ID,
-               };
+                COL_ID, COL_NAME, COL_BREED, COL_GENDER, COL_MEASUREMENT
+        };
 
         Cursor todoCursor = getContentResolver().query(CONTENT_URI, projection,
                 null, null, null);
 
         ListView item = (ListView) findViewById(R.id.lvItemView);
 
-        ListViewItemAdapter listViewItemAdapter = new ListViewItemAdapter(this, todoCursor);
+        listViewItemAdapter = new ListViewItemAdapter(this, todoCursor);
 
         item.setAdapter(listViewItemAdapter);
 

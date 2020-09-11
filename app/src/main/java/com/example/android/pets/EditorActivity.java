@@ -154,7 +154,7 @@ public class EditorActivity extends AppCompatActivity {
                     .show();
         }*/
 
-        if (name.isEmpty() || breed.isEmpty() || weight <= 0) {
+        /*if (name.isEmpty() || breed.isEmpty() || weight <= 0) {
             Toast.makeText(getApplicationContext(), " Please complete the information",
                     Toast.LENGTH_SHORT)
                     .show();
@@ -163,9 +163,9 @@ public class EditorActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Saved", Toast.LENGTH_SHORT)
                     .show();
             finish();
-        }
+        }*/
 
-       /* if (name.isEmpty() || breed.isEmpty() || weight <= 0) {
+        if (name.isEmpty() || breed.isEmpty() || weight <= 0) {
             Toast.makeText(getApplicationContext(), " Please complete the information",
                     Toast.LENGTH_SHORT)
                     .show();
@@ -175,8 +175,6 @@ public class EditorActivity extends AppCompatActivity {
                     .show();
             finish();
         }
-    }*/
-
     }
 
     private void delete() {

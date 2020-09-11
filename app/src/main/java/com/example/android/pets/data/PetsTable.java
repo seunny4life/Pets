@@ -18,7 +18,7 @@ public final class PetsTable extends SQLiteOpenHelper {
     private SQLiteDatabase insertData, updateData, deleteData, db;
 
     public static final String TABLE_NAME = "pets";
-    public static final String COL_ID = "id";
+    public static final String COL_ID = "_id";
     public static final String COL_NAME = "name";
     public static final String COL_BREED = "breed";
     public static final String COL_GENDER = "gender";
@@ -58,13 +58,14 @@ public final class PetsTable extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-  /*  //Insert Data
+  /*
+    //Insert Data
     // Gets the data repository in write mode
     public long insertDatabase(String name, String breed, int gender, double measurement) {
         contentValues = new ContentValues();
         insertData = this.getWritableDatabase();
 
-// Create a new map of values, where column names are the keys
+    // Create a new map of values, where column names are the keys
         contentValues.put(COL_NAME, name);
         contentValues.put(COL_BREED, breed);
         contentValues.put(COL_GENDER, gender);

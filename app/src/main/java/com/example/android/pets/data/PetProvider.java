@@ -86,27 +86,26 @@ public class PetProvider extends ContentProvider {
                         String sortOrder) {
 
         sqLiteDatabase = petsTable.getReadableDatabase();
-        Cursor cursor = null;
+        Cursor cursor;
         String id = null;
 
         int match = sUriMatcher.match(uri);
 
         switch (match) {
             case PETS:
-             /*  cursor = sqLiteDatabase.query(TABLE_NAME, projection, selection,
-                        selectionArgs, null, null, sortOrder);*/
+                cursor = sqLiteDatabase.query(TABLE_NAME, projection, selection,
+                        selectionArgs, null, null, sortOrder);
                 break;
             case PETS_ID:
+
                 projection = new String[]{COL_NAME};
                 selection = COL_ID + "=?";
                 selectionArgs = new String[]{String.valueOf(uri)};
 
-               /* cursor = sqLiteDatabase.query(TABLE_NAME, projection, selection,
-                        selectionArgs, null, null, sortOrder);*/
+                cursor = sqLiteDatabase.query(TABLE_NAME, projection, selection,
+                        selectionArgs, null, null, sortOrder);
 
-                cursor = petsTable.getData(TABLE_NAME,
-                        projection, selection, selectionArgs,
-                        sortOrder);
+
                 cursor.setNotificationUri(getContext().getContentResolver(), uri);
                 break;
             default:
@@ -123,11 +122,11 @@ public class PetProvider extends ContentProvider {
     @Override
     public Uri insert(Uri uri, ContentValues contentValues) {
 
-      /* sqLiteDatabase = petsTable.getWritableDatabase();
+        sqLiteDatabase = petsTable.getWritableDatabase();
 
         // Insert the new row, returning the primary key value of the new row
 
-        long inserted = sqLiteDatabase.insert(TABLE_NAME, null, contentValues);
+       /*   long inserted = sqLiteDatabase.insert(TABLE_NAME, null, contentValues);
 
         sqLiteDatabase.close();
 
@@ -151,15 +150,15 @@ public class PetProvider extends ContentProvider {
             return null;
         }*/
 
-        sqLiteDatabase = petsTable.getWritableDatabase();
-
         long db = petsTable.insertDatabase(contentValues);
+
         if (db >= 0) {
             Uri uri1 = ContentUris.withAppendedId(CONTENT_URI, db);
             getContext().getContentResolver().notifyChange(uri1, null);
             return uri1;
         }
-        throw new SQLException("FAILED!! NOT DATA STORE " + uri);
+        throw new SQLException("FAILED!! NO DATA STORE " + uri);
+
     }
 
     /**
@@ -215,6 +214,9 @@ public class PetProvider extends ContentProvider {
      */
     @Override
     public String getType(Uri uri) {
+
+        int deleted;
+
         final int match = sUriMatcher.match(uri);
         switch (match) {
             case PETS:
