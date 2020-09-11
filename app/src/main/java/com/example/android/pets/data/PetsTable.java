@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.net.Uri;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -122,7 +121,7 @@ public final class PetsTable extends SQLiteOpenHelper {
     }
 
     //TO DISPLAY ALL THE INFORMATION ON THE MAIN PAGE OF OUR APP
-    public List<Pets> getAllData() {
+    public Cursor getAllData() {
 
         db = this.getReadableDatabase();
 
@@ -148,7 +147,9 @@ public final class PetsTable extends SQLiteOpenHelper {
 
         db.close();
 
-        return pets;
+       // return pets;
+
+        return cursor;
     }
 
     //Update Data

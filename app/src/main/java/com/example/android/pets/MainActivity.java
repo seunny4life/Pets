@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
     //private PetListView petListView;
     private RecyclerView recyclerView;
     private ListViewItemAdapter listViewItemAdapter;
-
+    private SQLiteDatabase sqLiteDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,12 +99,15 @@ public class MainActivity extends AppCompatActivity {
 // Get access to the underlying writeable database
 // Query for items from the database and get a cursor back
 
+
         String[] projection = new String[]{
                 COL_ID, COL_NAME, COL_BREED, COL_GENDER, COL_MEASUREMENT
         };
 
         Cursor todoCursor = getContentResolver().query(CONTENT_URI, projection,
                 null, null, null);
+
+        //todoCursor = petsTable.getAllData();
 
         ListView item = (ListView) findViewById(R.id.lvItemView);
 
