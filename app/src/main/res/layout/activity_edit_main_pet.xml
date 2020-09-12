@@ -18,7 +18,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="@dimen/activity_margin"
-    tools:context="">
+    tools:context=".data.EditMainPet">
 
     <!-- Overview category -->
     <LinearLayout
