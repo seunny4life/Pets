@@ -1,47 +1,24 @@
-/*
- * Copyright (C) 2016 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-package com.example.android.pets;
+package com.example.android.pets.data;
 
-import android.content.ContentValues;
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.android.pets.data.PetProvider;
-import com.example.android.pets.data.PetsTable;
+import com.example.android.pets.R;
 
-import static com.example.android.pets.data.PetsTable.*;
+import static com.example.android.pets.data.PetsTable.GENDER_FEMALE;
+import static com.example.android.pets.data.PetsTable.GENDER_MALE;
+import static com.example.android.pets.data.PetsTable.GENDER_UNKNOWN;
 
-/**
- * Allows user to create a new pet or edit an existing one.
- */
-public class EditorActivity extends AppCompatActivity {
+public class EditMainPet extends AppCompatActivity {
 
     PetProvider petProvider;
     /**
@@ -75,22 +52,17 @@ public class EditorActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_editor);
+        setContentView(R.layout.activity_edit_main_pet);
 
-        // Find all relevant views that we will need to read user input from
+
         mNameEditText = (EditText) findViewById(R.id.edit_pet_name);
         mBreedEditText = (EditText) findViewById(R.id.edit_pet_breed);
         mWeightEditText = (EditText) findViewById(R.id.edit_pet_weight);
         mGenderSpinner = (Spinner) findViewById(R.id.spinner_gender);
 
         setupSpinner();
-
-        editInformation();
     }
 
-    /**
-     * Setup the dropdown spinner that allows the user to select the gender of the pet.
-     */
     private void setupSpinner() {
         // Create adapter for spinner. The list options are from the String array it will use
         // the spinner will use the default layout
@@ -127,81 +99,6 @@ public class EditorActivity extends AppCompatActivity {
         });
     }
 
-    private void insertPet() {
-
-        petsTable = new PetsTable(this);
-        ContentValues contentValues = new ContentValues();
-
-        String name = mNameEditText.getText().toString().trim();
-        String breed = mBreedEditText.getText().toString().trim();
-        int gender = (mGender);
-        String measurement = mWeightEditText.getText().toString().trim();
-        if (measurement.isEmpty()) {
-            measurement = " " + 0.0;
-        }
-        double weight = Double.parseDouble(measurement);
-
-        contentValues.put(COL_NAME, name);
-        contentValues.put(COL_BREED, breed);
-        contentValues.put(COL_GENDER, gender);
-        contentValues.put(COL_MEASUREMENT, weight);
-
-       /* if (name.isEmpty() || weight <= 0) {
-            Toast.makeText(getApplicationContext(), "Invalid Name or Weight", Toast.LENGTH_SHORT)
-                    .show();
-        } else {
-            petsTable.insertDatabase(name, breed, gender, weight);
-            //petsTable.insertDatabase(contentValues);
-            finish();
-            Toast.makeText(getApplicationContext(), "Saved", Toast.LENGTH_SHORT)
-                    .show();
-        }*/
-
-        /*if (name.isEmpty() || breed.isEmpty() || weight <= 0) {
-            Toast.makeText(getApplicationContext(), " Please complete the information",
-                    Toast.LENGTH_SHORT)
-                    .show();
-        } else {
-            petsTable.insertDatabase(contentValues);
-            Toast.makeText(getApplicationContext(), "Saved", Toast.LENGTH_SHORT)
-                    .show();
-            finish();
-        }*/
-
-        if (name.isEmpty() || breed.isEmpty() || weight <= 0) {
-            Toast.makeText(getApplicationContext(), " Please complete the information",
-                    Toast.LENGTH_SHORT)
-                    .show();
-        } else {
-            getContentResolver().insert(PetProvider.CONTENT_URI, contentValues);
-            Toast.makeText(getApplicationContext(), "Saved", Toast.LENGTH_SHORT)
-                    .show();
-            finish();
-        }
-    }
-
-    private void editInformation() {
-
-        Intent intent = getIntent();
-
-        Uri currentUri = intent.getData();
-
-        if (currentUri == null) {
-            setTitle("Add a Pet");
-        } else {
-            setTitle("Edit Pet");
-        }
-
-
-    }
-
-    private void delete() {
-        getContentResolver().delete(PetProvider.CONTENT_URI,
-                COL_ID + "=?",
-                new String[]{String.valueOf(COL_ID)});
-
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu options from the res/menu/menu_editor.xml file.
@@ -216,11 +113,11 @@ public class EditorActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             // Respond to a click on the "Save" menu option
             case R.id.action_save:
-                insertPet();
+
                 return true;
             // Respond to a click on the "Delete" menu option
             case R.id.action_delete:
-                delete();
+
                 return true;
             // Respond to a click on the "Up" arrow button in the app bar
             case android.R.id.home:

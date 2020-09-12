@@ -39,7 +39,7 @@ public class ListViewItemAdapter extends CursorAdapter {
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-// Find fields to populate in inflated template
+        // Find fields to populate in inflated template
         TextView name = (TextView) view.findViewById(R.id.name);
         TextView summary = (TextView) view.findViewById(R.id.summary);
 

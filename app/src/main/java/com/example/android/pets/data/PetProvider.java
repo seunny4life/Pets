@@ -86,7 +86,7 @@ public class PetProvider extends ContentProvider {
                         String sortOrder) {
 
         sqLiteDatabase = petsTable.getReadableDatabase();
-        Cursor cursor = null;
+        Cursor cursor;
         String id = null;
 
         int match = sUriMatcher.match(uri);
@@ -105,15 +105,15 @@ public class PetProvider extends ContentProvider {
                 cursor = petsTable.getData(COL_ID, projection, selection, selectionArgs, sortOrder);
 
                 //cursor = sqLiteDatabase.query(TABLE_NAME, projection, selection,
-                  //      selectionArgs, null, null, sortOrder);
+                //      selectionArgs, null, null, sortOrder);
 
-
-                cursor.setNotificationUri(getContext().getContentResolver(), uri);
                 break;
             default:
                 throw new IllegalArgumentException("Cannot query unknown URI " + uri);
         }
         //cursor.close();
+        cursor.setNotificationUri(getContext().getContentResolver(), uri);
+
         return cursor;
 
     }

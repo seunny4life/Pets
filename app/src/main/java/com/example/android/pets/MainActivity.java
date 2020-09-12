@@ -1,5 +1,6 @@
 package com.example.android.pets;
 
+import android.content.ContentUris;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -12,9 +13,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.android.pets.data.EditMainPet;
 import com.example.android.pets.data.PetProvider;
 import com.example.android.pets.data.Pets;
 import com.example.android.pets.data.PetsTable;
@@ -31,7 +35,7 @@ import static com.example.android.pets.data.PetsTable.COL_NAME;
 import static com.example.android.pets.data.PetsTable.TABLE_NAME;
 import static com.example.android.pets.data.PetProvider.*;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     private Pets pets;
     private PetsTable petsTable;
@@ -59,8 +63,6 @@ public class MainActivity extends AppCompatActivity {
 
         petsTable = new PetsTable(this);
 
-        ListView item = (ListView) findViewById(R.id.lvItemView);
-
         displayInformation();
     }
 
@@ -70,12 +72,21 @@ public class MainActivity extends AppCompatActivity {
         displayInformation();
     }
 
+    //THIS WILL ALLOW US TO ADD PETS
     private void editorActivity() {
         Intent intent = new Intent(MainActivity.this, EditorActivity.class);
         startActivity(intent);
 
     }
 
+    /*//THIS ALLOW TO EDIT THE PETS, WE ALREADY HAVE ON THE TABLE
+    private void editorMainPets() {
+        Intent intent = new Intent(MainActivity.this, EditMainPet.class);
+        startActivity(intent);
+
+    }
+*/
+    //TO DISPLAY ALL THE PETS IN THE TABLE
     public void displayInformation() {
 
 //        recyclerView = (RecyclerView) findViewById(R.id.recyclerViewShow);
@@ -117,7 +128,9 @@ public class MainActivity extends AppCompatActivity {
 
         listViewItemAdapter.changeCursor(todoCursor);
 
+
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -133,6 +146,7 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             // Respond to a click on the "Insert dummy data" menu option
             case R.id.action_insert_dummy_data:
+                //editorMainPets();
                 editorActivity();
                 return true;
 
@@ -142,6 +156,19 @@ public class MainActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+        Intent intent = new Intent(MainActivity.this, EditorActivity.class);
+
+        Uri currentPetUri = ContentUris.withAppendedId(CONTENT_URI, id);
+
+        intent.setData(currentPetUri);
+
+        startActivity(intent);
+
     }
 
 }
