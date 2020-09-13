@@ -20,7 +20,7 @@
 
     <item
         android:id="@+id/edit_pet"
-        android:title="@string/edit"
+        android:title="@string/edit_pet"
         app:showAsAction="never" />
 
     <item

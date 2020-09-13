@@ -14,7 +14,7 @@
     <string name="app_name">Pets</string>
 
     <!-- Label for overflow menu option that inserts fake pet data into the app [CHAR LIMIT=20] -->
-    <string name="edit">Edit</string>
+    <string name="edit_pet">Edit</string>
 
     <string name="action_insert_dummy_data">Insert Dummy Data</string>
 

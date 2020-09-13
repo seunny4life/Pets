@@ -102,10 +102,10 @@ public class PetProvider extends ContentProvider {
                 selection = COL_ID + "=?";
                 selectionArgs = new String[]{String.valueOf(uri)};
 
-                cursor = petsTable.getData(COL_ID, projection, selection, selectionArgs, sortOrder);
+                // cursor = petsTable.getData(COL_ID, projection, selection, selectionArgs, sortOrder);
 
-                //cursor = sqLiteDatabase.query(TABLE_NAME, projection, selection,
-                //      selectionArgs, null, null, sortOrder);
+                cursor = sqLiteDatabase.query(TABLE_NAME, projection, selection,
+                        selectionArgs, null, null, sortOrder);
 
                 break;
             default:

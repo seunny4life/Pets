@@ -22,9 +22,6 @@ import com.example.android.pets.data.EditMainPet;
 import com.example.android.pets.data.PetProvider;
 import com.example.android.pets.data.Pets;
 import com.example.android.pets.data.PetsTable;
-
-import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.android.pets.data.PetsTable.COL_BREED;

@@ -17,11 +17,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".EditorActivity"
-            android:label="@string/editor_activity_title_new_pet"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/EditorTheme"></activity>
+            android:theme="@style/EditorTheme">
+            <!--            android:label="@string/editor_activity_title_new_pet"-->
+        </activity>
 
         <!--<activity android:name=".data.EditMainPet"
             android:label="Edit Pet"

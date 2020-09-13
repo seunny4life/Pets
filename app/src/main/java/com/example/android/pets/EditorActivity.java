@@ -17,9 +17,16 @@ package com.example.android.pets;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.LoaderManager;
 import android.support.v4.app.NavUtils;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -27,23 +34,26 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.pets.data.PetProvider;
 import com.example.android.pets.data.PetsTable;
 
+import static com.example.android.pets.data.PetProvider.CONTENT_URI;
 import static com.example.android.pets.data.PetsTable.*;
 
 /**
  * Allows user to create a new pet or edit an existing one.
  */
-public class EditorActivity extends AppCompatActivity {
+public class EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     PetProvider petProvider;
+
+    private Uri mCurrentPetUri;
+
     /**
      * EditText field to enter the pet's name
      */
@@ -82,6 +92,8 @@ public class EditorActivity extends AppCompatActivity {
         mBreedEditText = (EditText) findViewById(R.id.edit_pet_breed);
         mWeightEditText = (EditText) findViewById(R.id.edit_pet_weight);
         mGenderSpinner = (Spinner) findViewById(R.id.spinner_gender);
+
+        petsTable = new PetsTable(this);
 
         setupSpinner();
 
@@ -129,7 +141,7 @@ public class EditorActivity extends AppCompatActivity {
 
     private void insertPet() {
 
-        petsTable = new PetsTable(this);
+
         ContentValues contentValues = new ContentValues();
 
         String name = mNameEditText.getText().toString().trim();
@@ -189,7 +201,7 @@ public class EditorActivity extends AppCompatActivity {
         if (currentUri == null) {
             setTitle("Add a Pet");
         } else {
-            setTitle("Edit Pet");
+            setTitle(getString(R.string.edit_pet));
         }
 
 
@@ -229,5 +241,35 @@ public class EditorActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @NonNull
+    @Override
+    public Loader<Cursor> onCreateLoader(int i, @Nullable Bundle bundle) {
+
+        // Since the editor shows all pet attributes, define a projection that contains
+        // all columns from the pet table
+        String[] projection = {COL_ID, COL_NAME, COL_GENDER,
+                COL_BREED, COL_MEASUREMENT};
+        String selection = COL_ID + "=?";
+
+        // This loader will execute the ContentProvider's query method on a background thread
+        return new CursorLoader(this,   // Parent activity context
+                mCurrentPetUri,         // Query the content URI for the current pet
+                projection,             // Columns to include in the resulting Cursor
+                null,                   // No selection clause
+                null,                   // No selection arguments
+                null);                  // Default sort order
+
+    }
+
+    @Override
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
+
+    }
+
+    @Override
+    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
+
     }
 }
