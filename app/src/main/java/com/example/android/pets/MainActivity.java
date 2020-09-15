@@ -22,6 +22,7 @@ import com.example.android.pets.data.EditMainPet;
 import com.example.android.pets.data.PetProvider;
 import com.example.android.pets.data.Pets;
 import com.example.android.pets.data.PetsTable;
+
 import java.util.List;
 
 import static com.example.android.pets.data.PetsTable.COL_BREED;
@@ -112,19 +113,40 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 COL_ID, COL_NAME, COL_BREED, COL_GENDER, COL_MEASUREMENT
         };
 
-        Cursor todoCursor = getContentResolver().query(CONTENT_URI, projection,
-                null, null, null);
+        Cursor todoCursor;
+        /*todoCursor = getContentResolver().query(CONTENT_URI, projection, null,
+                null, null);*/
+        todoCursor = petsTable.getAllData();
 
-        //todoCursor = petsTable.getAllData();
-
+        //Find the ListView which will be populated the pet data
         ListView item = (ListView) findViewById(R.id.lvItemView);
 
+        //Find and set empty view on the ListView, so that it only show when the list is 0 items
+        View emptyView = (View) findViewById(R.id.constraint);
+        item.setEmptyView(emptyView);
+
+        //SetUp Adapter to create list
         listViewItemAdapter = new ListViewItemAdapter(this, todoCursor);
 
         item.setAdapter(listViewItemAdapter);
 
         listViewItemAdapter.changeCursor(todoCursor);
 
+//Setup item click listener
+        item.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                Intent intent = new Intent(MainActivity.this, EditorActivity.class);
+
+                Uri currentPetUri = ContentUris.withAppendedId(CONTENT_URI, id);
+
+                intent.setData(currentPetUri);
+
+                startActivity(intent);
+
+            }
+        });
 
     }
 

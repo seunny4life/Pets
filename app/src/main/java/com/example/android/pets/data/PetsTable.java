@@ -12,7 +12,7 @@ import java.util.List;
 
 public final class PetsTable extends SQLiteOpenHelper {
 
-    private ContentValues contentValues;
+    private ContentValues contentValues = null;
 
     private SQLiteDatabase insertData, updateData, deleteData, db;
 
@@ -104,8 +104,8 @@ public final class PetsTable extends SQLiteOpenHelper {
         cursor.close();
 
         return cursor;
-
-    /*public Cursor getData(long id) {
+/*
+    public Cursor getData(long id) {
 
         String[] projection = {COL_NAME, COL_GENDER};
         String selection = COL_ID + "=?";
@@ -115,9 +115,7 @@ public final class PetsTable extends SQLiteOpenHelper {
 
         cursor.close();
 
-        return cursor;
-
-    }*/
+        return cursor;*/
     }
 
     //TO DISPLAY ALL THE INFORMATION ON THE MAIN PAGE OF OUR APP
@@ -128,7 +126,7 @@ public final class PetsTable extends SQLiteOpenHelper {
         List<Pets> pets = new ArrayList<>();
 
         String selectAll = " SELECT * FROM " + TABLE_NAME +
-                " ORDER BY " + COL_NAME;
+                " ORDER BY " + COL_NAME + " ASC ";
 
         Cursor cursor = db.rawQuery(selectAll, null);
 
@@ -146,8 +144,6 @@ public final class PetsTable extends SQLiteOpenHelper {
         }
 
         db.close();
-
-       // return pets;
 
         return cursor;
     }
@@ -173,7 +169,9 @@ public final class PetsTable extends SQLiteOpenHelper {
 
     //Delete Data
     public int deleteData(int delete) {
+
         deleteData = this.getWritableDatabase();
+
         int deleteDataNow = deleteData.delete(
                 TABLE_NAME,
                 COL_ID + "=?",
